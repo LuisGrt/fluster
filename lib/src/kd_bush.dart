@@ -9,36 +9,36 @@ import 'base_cluster.dart';
 
 class KDBush {
   List<BaseCluster> points;
-  int nodeSize;
-  List<int> ids;
-  List<double> coordinates;
+  int? nodeSize;
+  List<int?>? ids;
+  List<double?>? coordinates;
 
-  KDBush({this.points, this.nodeSize}) {
-    ids = List(points.length);
-    coordinates = List(points.length * 2);
+  KDBush({required this.points, this.nodeSize}) {
+    List<int> ids = [];
+    List<double> coordinates = [];
 
-    for (int i = 0; i < points.length; i++) {
+    points.asMap().forEach((i, point) {
       ids[i] = i;
-      coordinates[i * 2] = points[i].x;
-      coordinates[(i * 2) + 1] = points[i].y;
-    }
+      coordinates[i * 2] = point.x;
+      coordinates[(i * 2) + 1] = point.y;
+    });
 
     _sortKD(
         ids: ids,
         coordinates: coordinates,
-        nodeSize: nodeSize,
+        nodeSize: nodeSize!,
         left: 0,
         right: (ids.length - 1),
         axis: 0);
   }
 
   _sortKD(
-      {List<int> ids,
-      List<double> coordinates,
-      int nodeSize,
-      int left,
-      int right,
-      int axis}) {
+      {List<int?>? ids,
+      List<double?>? coordinates,
+      required int nodeSize,
+      required int left,
+      required int right,
+      int? axis}) {
     if (right - left <= nodeSize) {
       return;
     }
@@ -59,7 +59,7 @@ class KDBush {
         nodeSize: nodeSize,
         left: left,
         right: m - 1,
-        axis: 1 - axis);
+        axis: 1 - axis!);
     _sortKD(
         ids: ids,
         coordinates: coordinates,
@@ -69,26 +69,26 @@ class KDBush {
         axis: 1 - axis);
   }
 
-  List<int> range(double minX, double minY, double maxX, double maxY) {
+  List<int?> range(double minX, double minY, double maxX, double maxY) {
     Queue stack = Queue();
     stack.add(0);
-    stack.add(ids.length - 1);
+    stack.add(ids!.length - 1);
     stack.add(0);
 
-    List<int> result = List();
+    List<int?> result = [];
 
     while (stack.isNotEmpty) {
       int axis = stack.removeLast();
       int right = stack.removeLast();
       int left = stack.removeLast();
 
-      if (right - left <= nodeSize) {
+      if (right - left <= nodeSize!) {
         for (int i = left; i <= right; i++) {
-          double x = coordinates[i * 2];
-          double y = coordinates[i * 2 + 1];
+          double x = coordinates![i * 2]!;
+          double? y = coordinates![i * 2 + 1];
 
-          if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
-            result.add(ids[i]);
+          if (x >= minX && x <= maxX && y! >= minY && y <= maxY) {
+            result.add(ids![i]);
           }
         }
 
@@ -97,20 +97,20 @@ class KDBush {
 
       int m = (left + right) >> 1;
 
-      double x = coordinates[m * 2];
-      double y = coordinates[m * 2 + 1];
+      double x = coordinates![m * 2]!;
+      double? y = coordinates![m * 2 + 1];
 
-      if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
-        result.add(ids[m]);
+      if (x >= minX && x <= maxX && y! >= minY && y <= maxY) {
+        result.add(ids![m]);
       }
 
-      if (axis == 0 ? minX <= x : minY <= y) {
+      if (axis == 0 ? minX <= x : minY <= y!) {
         stack.add(left);
         stack.add(m - 1);
         stack.add(1 - axis);
       }
 
-      if (axis == 0 ? maxX >= x : maxY >= y) {
+      if (axis == 0 ? maxX >= x : maxY >= y!) {
         stack.add(m + 1);
         stack.add(right);
         stack.add(1 - axis);
@@ -120,13 +120,13 @@ class KDBush {
     return result;
   }
 
-  List<int> within(double qx, double qy, double r) {
+  List<int?> within(double? qx, double? qy, double r) {
     Queue stack = Queue();
     stack.add(0);
-    stack.add(ids.length - 1);
+    stack.add(ids!.length - 1);
     stack.add(0);
 
-    List<int> result = List();
+    List<int?> result = [];
     double r2 = r * r;
 
     while (stack.isNotEmpty) {
@@ -134,12 +134,12 @@ class KDBush {
       int right = stack.removeLast();
       int left = stack.removeLast();
 
-      if (right - left <= nodeSize) {
+      if (right - left <= nodeSize!) {
         for (int i = left; i <= right; i++) {
           if (_squaredDistance(
-                  coordinates[i * 2], coordinates[i * 2 + 1], qx, qy) <=
+                  coordinates![i * 2]!, coordinates![i * 2 + 1]!, qx!, qy!) <=
               r2) {
-            result.add(ids[i]);
+            result.add(ids![i]);
           }
         }
 
@@ -148,20 +148,20 @@ class KDBush {
 
       int m = (left + right) >> 1;
 
-      double x = coordinates[m * 2];
-      double y = coordinates[m * 2 + 1];
+      double x = coordinates![m * 2]!;
+      double y = coordinates![m * 2 + 1]!;
 
-      if (_squaredDistance(x, y, qx, qx) <= r2) {
-        result.add(ids[m]);
+      if (_squaredDistance(x, y, qx!, qx) <= r2) {
+        result.add(ids![m]);
       }
 
-      if (axis == 0 ? qx - r <= x : qy - r <= y) {
+      if (axis == 0 ? qx - r <= x : qy! - r <= y) {
         stack.add(left);
         stack.add(m - 1);
         stack.add(1 - axis);
       }
 
-      if (axis == 0 ? qx + r >= x : qy + r >= y) {
+      if (axis == 0 ? qx + r >= x : qy! + r >= y) {
         stack.add(m + 1);
         stack.add(right);
         stack.add(1 - axis);
@@ -172,16 +172,16 @@ class KDBush {
   }
 
   _select(
-      {List<int> ids,
-      List<double> coordinates,
-      int k,
-      int left,
-      int right,
-      int axis}) {
+      {List<int?>? ids,
+      List<double?>? coordinates,
+      int? k,
+      required int left,
+      required int right,
+      int? axis}) {
     while (right > left) {
       if (right - left > 600) {
         int n = right - left + 1;
-        int m = k - left + 1;
+        int m = k! - left + 1;
         double z = math.log(n);
         double s = 0.5 * math.exp(2 * z / 3);
         double sd =
@@ -198,12 +198,12 @@ class KDBush {
             axis: axis);
       }
 
-      double t = coordinates[k * 2 + axis];
+      double t = coordinates![k! * 2 + axis!]!;
       int i = left;
       int j = right;
 
-      _swapItem(ids: ids, coordinates: coordinates, i: left, j: k);
-      if (coordinates[right * 2 + axis] > t) {
+      _swapItem(ids: ids!, coordinates: coordinates, i: left, j: k);
+      if (coordinates[right * 2 + axis]! > t) {
         _swapItem(ids: ids, coordinates: coordinates, i: left, j: right);
       }
 
@@ -212,11 +212,11 @@ class KDBush {
         i++;
         j--;
 
-        while (coordinates[i * 2 + axis] < t) {
+        while (coordinates[i * 2 + axis]! < t) {
           i++;
         }
 
-        while (coordinates[j * 2 + axis] > t) {
+        while (coordinates[j * 2 + axis]! > t) {
           j--;
         }
       }
@@ -238,20 +238,24 @@ class KDBush {
     }
   }
 
-  _swapItem({List<int> ids, List<double> coordinates, int i, int j}) {
+  _swapItem(
+      {required List<int?> ids,
+      required List<double?> coordinates,
+      required int i,
+      required int j}) {
     _swapInt(list: ids, i: i, j: j);
     _swapDouble(list: coordinates, i: i * 2, j: j * 2);
     _swapDouble(list: coordinates, i: (i * 2) + 1, j: (j * 2) + 1);
   }
 
-  _swapInt({List<int> list, int i, int j}) {
-    int temp = list[i];
+  _swapInt({required List<int?> list, required int i, required int j}) {
+    int? temp = list[i];
     list[i] = list[j];
     list[j] = temp;
   }
 
-  _swapDouble({List<double> list, int i, int j}) {
-    double temp = list[i];
+  _swapDouble({required List<double?> list, required int i, required int j}) {
+    double? temp = list[i];
     list[i] = list[j];
     list[j] = temp;
   }

@@ -5,16 +5,18 @@
 class BaseCluster {
   double x;
   double y;
-  int zoom;
-  int pointsSize;
-  int parentId;
-  int index;
-  int id;
+  int? zoom;
+  int? pointsSize;
+  int? parentId;
+  int? index;
+  int? id;
   bool isCluster = false;
 
   /// For PointCluster instances that are standalone (i.e. not cluster) items.
-  String markerId;
+  String? markerId;
 
   /// For clusters that wish to display one representation of its children.
-  String childMarkerId;
+  String? childMarkerId;
+
+  BaseCluster({required this.x, required this.y});
 }
