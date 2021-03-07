@@ -11,12 +11,12 @@ import 'base_cluster.dart';
 class KDBush {
   List<BaseCluster>? points;
   int nodeSize;
-  List<int?>? ids;
-  List<double?>? coordinates;
+  List<int>? ids;
+  List<double>? coordinates;
 
   KDBush({this.points, this.nodeSize = 0}) {
-    ids = [];
-    coordinates = [];
+    ids = []..length = points?.length ?? 0;
+    coordinates = []..length = points?.length != null ? points!.length * 2 : 0;
 
     points?.asMap().forEach((i, point) {
       ids![i] = i;
@@ -85,10 +85,10 @@ class KDBush {
 
       if (right - left <= nodeSize) {
         for (var i = left; i <= right; i++) {
-          var x = coordinates![i * 2]!;
-          var y = coordinates![i * 2 + 1];
+          var x = coordinates?[i * 2];
+          var y = coordinates?[i * 2 + 1];
 
-          if (x >= minX && x <= maxX && y! >= minY && y <= maxY) {
+          if (x! >= minX && x <= maxX && y! >= minY && y <= maxY) {
             result.add(ids![i]);
           }
         }
@@ -98,20 +98,20 @@ class KDBush {
 
       var m = (left + right) >> 1;
 
-      var x = coordinates![m * 2]!;
+      var x = coordinates![m * 2];
       var y = coordinates![m * 2 + 1];
 
-      if (x >= minX && x <= maxX && y! >= minY && y <= maxY) {
+      if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
         result.add(ids![m]);
       }
 
-      if (axis == 0 ? minX <= x : minY <= y!) {
+      if (axis == 0 ? minX <= x : minY <= y) {
         stack.add(left);
         stack.add(m - 1);
         stack.add(1 - axis);
       }
 
-      if (axis == 0 ? maxX >= x : maxY >= y!) {
+      if (axis == 0 ? maxX >= x : maxY >= y) {
         stack.add(m + 1);
         stack.add(right);
         stack.add(1 - axis);
@@ -138,7 +138,7 @@ class KDBush {
       if (right - left <= nodeSize) {
         for (var i = left; i <= right; i++) {
           if (_squaredDistance(
-                  coordinates![i * 2]!, coordinates![i * 2 + 1]!, qx!, qy!) <=
+                  coordinates![i * 2], coordinates![i * 2 + 1], qx!, qy!) <=
               r2) {
             result.add(ids![i]);
           }
@@ -149,8 +149,8 @@ class KDBush {
 
       var m = (left + right) >> 1;
 
-      var x = coordinates![m * 2]!;
-      var y = coordinates![m * 2 + 1]!;
+      var x = coordinates![m * 2];
+      var y = coordinates![m * 2 + 1];
 
       if (_squaredDistance(x, y, qx!, qx) <= r2) {
         result.add(ids![m]);
