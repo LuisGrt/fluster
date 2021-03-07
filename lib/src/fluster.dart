@@ -1,5 +1,6 @@
 /*
  * Created by Alfonso Cejudo, Sunday, July 21st 2019.
+ * Updated by LuisGrt, Sunday, March 7th 2021.
  */
 
 import 'dart:math' as math;
@@ -46,7 +47,7 @@ class Fluster<T extends Clusterable> {
     points,
     createCluster,
   })  : _points = points,
-        _trees = [],
+        _trees = List<KDBush>.filled(maxZoom + 2, KDBush()),
         _createCluster = createCluster {
     List<BaseCluster> clusters = [];
 
@@ -96,7 +97,7 @@ class Fluster<T extends Clusterable> {
     List<T> result = [];
 
     for (int? id in ids) {
-      BaseCluster c = tree.points[id!];
+      BaseCluster c = tree.points![id!];
 
       result.add((c.pointsSize != null && c.pointsSize! > 0)
           ? _createCluster(c, _xLng(c.x), _yLat(c.y))
@@ -121,14 +122,14 @@ class Fluster<T extends Clusterable> {
 
     KDBush? index = _trees[originZoom];
 
-    BaseCluster origin = index.points[originId];
+    BaseCluster origin = index.points![originId];
 
     double r = radius / (extent * math.pow(2, originZoom - 1));
     List<int?> ids = index.within(origin.x, origin.y, r);
 
     List<T> children = [];
     for (int? id in ids) {
-      BaseCluster c = index.points[id!];
+      BaseCluster c = index.points![id!];
 
       if (c.parentId == clusterId) {
         children.add((c.pointsSize != null && c.pointsSize! > 0)
@@ -201,7 +202,7 @@ class Fluster<T extends Clusterable> {
       int id = (i << 5) + (zoom + 1);
 
       for (int? neighborId in neighborIds) {
-        BaseCluster b = tree.points[neighborId!];
+        BaseCluster b = tree.points![neighborId!];
 
         if (b.zoom! <= zoom) {
           continue;

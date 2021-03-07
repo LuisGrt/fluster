@@ -27,7 +27,7 @@ abstract class Clusterable {
   String markerId;
 
   /// Useful for representing a cluster by referencing one of its children.
-  String childMarkerId;
+  String? childMarkerId;
 
   Clusterable({
     required this.latitude,
@@ -36,6 +36,6 @@ abstract class Clusterable {
     required this.clusterId,
     required this.pointsSize,
     required this.markerId,
-    required this.childMarkerId,
+    this.childMarkerId,
   });
 }

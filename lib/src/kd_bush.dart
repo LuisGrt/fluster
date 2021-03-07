@@ -1,5 +1,6 @@
 /*
  * Created by Alfonso Cejudo, Sunday, July 21st 2019.
+ * Updated by LuisGrt, Sunday, March 7th 2021.
  */
 
 import 'dart:collection';
@@ -8,27 +9,27 @@ import 'dart:math' as math;
 import 'base_cluster.dart';
 
 class KDBush {
-  List<BaseCluster> points;
-  int? nodeSize;
+  List<BaseCluster>? points;
+  int nodeSize;
   List<int?>? ids;
   List<double?>? coordinates;
 
-  KDBush({required this.points, this.nodeSize}) {
-    List<int> ids = [];
-    List<double> coordinates = [];
+  KDBush({this.points, this.nodeSize = 0}) {
+    ids = [];
+    coordinates = [];
 
-    points.asMap().forEach((i, point) {
-      ids[i] = i;
-      coordinates[i * 2] = point.x;
-      coordinates[(i * 2) + 1] = point.y;
+    points?.asMap().forEach((i, point) {
+      ids![i] = i;
+      coordinates![i * 2] = point.x;
+      coordinates![(i * 2) + 1] = point.y;
     });
 
     _sortKD(
         ids: ids,
         coordinates: coordinates,
-        nodeSize: nodeSize!,
+        nodeSize: nodeSize,
         left: 0,
-        right: (ids.length - 1),
+        right: (ids!.length - 1),
         axis: 0);
   }
 
@@ -82,7 +83,7 @@ class KDBush {
       int right = stack.removeLast();
       int left = stack.removeLast();
 
-      if (right - left <= nodeSize!) {
+      if (right - left <= nodeSize) {
         for (int i = left; i <= right; i++) {
           double x = coordinates![i * 2]!;
           double? y = coordinates![i * 2 + 1];
@@ -134,7 +135,7 @@ class KDBush {
       int right = stack.removeLast();
       int left = stack.removeLast();
 
-      if (right - left <= nodeSize!) {
+      if (right - left <= nodeSize) {
         for (int i = left; i <= right; i++) {
           if (_squaredDistance(
                   coordinates![i * 2]!, coordinates![i * 2 + 1]!, qx!, qy!) <=
