@@ -12,16 +12,15 @@ class Cluster extends BaseCluster {
     int? id,
     int? pointsSize,
     String? childMarkerId,
+    int? zoom,
+    int? parentId,
   }) : super(
           x: x,
           y: y,
-        ) {
-    this.id = id;
-    this.pointsSize = pointsSize;
-    this.childMarkerId = childMarkerId;
-
-    this.isCluster = true;
-    this.zoom = 24; // Max value.
-    this.parentId = -1;
-  }
+          id: id,
+          pointsSize: pointsSize,
+          zoom: zoom ?? 24, // Max value.
+          parentId: parentId ?? -1,
+          childMarkerId: childMarkerId,
+        );
 }

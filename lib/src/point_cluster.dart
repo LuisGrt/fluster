@@ -9,15 +9,11 @@ class PointCluster extends BaseCluster {
   PointCluster({
     required x,
     required y,
-    int? zoom,
+    required int zoom,
     int? index,
     String? markerId,
-  }) : super(x: x, y: y) {
-    this.zoom = zoom;
+  }) : super(x: x, y: y, zoom: zoom, parentId: -1, isCluster: false) {
     this.index = index;
     this.markerId = markerId;
-
-    this.parentId = -1;
-    this.isCluster = false;
   }
 }

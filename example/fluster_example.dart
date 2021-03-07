@@ -6,33 +6,37 @@ import 'package:fluster/fluster.dart';
 import 'package:fluster/src/base_cluster.dart';
 import 'package:fluster/src/clusterable.dart';
 
-main() {
+void main() {
   const currentZoom = 10;
 
-  List<MapMarker> markers = [
+  var markers = <MapMarker>[
     MapMarker(
-        locationName: 'One',
-        markerId: '9000001',
-        latitude: 40.736291,
-        longitude: -73.990243),
+      locationName: 'One',
+      markerId: '9000001',
+      latitude: 40.736291,
+      longitude: -73.990243,
+    ),
     MapMarker(
-        locationName: 'Two',
-        markerId: '9000002',
-        latitude: 40.731349,
-        longitude: -73.997723),
+      locationName: 'Two',
+      markerId: '9000002',
+      latitude: 40.731349,
+      longitude: -73.997723,
+    ),
     MapMarker(
-        locationName: 'Three',
-        markerId: '9000003',
-        latitude: 40.670274,
-        longitude: -73.964054),
+      locationName: 'Three',
+      markerId: '9000003',
+      latitude: 40.670274,
+      longitude: -73.964054,
+    ),
     MapMarker(
-        locationName: 'Four',
-        markerId: '9000004',
-        latitude: 38.889974,
-        longitude: -77.019908),
+      locationName: 'Four',
+      markerId: '9000004',
+      latitude: 38.889974,
+      longitude: -77.019908,
+    ),
   ];
 
-  Fluster<MapMarker> fluster = Fluster<MapMarker>(
+  var fluster = Fluster<MapMarker>(
       minZoom: 0,
       maxZoom: 21,
       radius: 150,
@@ -50,8 +54,7 @@ main() {
               markerId: cluster.id.toString(),
               childMarkerId: cluster.childMarkerId));
 
-  List<MapMarker> clusters =
-      fluster.clusters([-180, -85, 180, 85], currentZoom);
+  var clusters = fluster.clusters([-180, -85, 180, 85], currentZoom);
 
   print('Number of clusters at zoom $currentZoom: ${clusters.length}');
 }
