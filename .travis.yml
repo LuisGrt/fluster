@@ -2,6 +2,7 @@ language: dart
 
 branches:
   only:
+    - master
     - null-safety
 
 jobs:
