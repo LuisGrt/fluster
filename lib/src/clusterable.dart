@@ -1,5 +1,6 @@
 /*
- * Created by Alfonso Cejudo, Wednesday, July 24th 2019.
+ * Created by Alfonso Cejudo, Sunday, July 21st 2019.
+ * Updated by LuisGrt, Sunday, March 7th 2021.
  */
 
 abstract class Clusterable {
@@ -26,14 +27,15 @@ abstract class Clusterable {
   String markerId;
 
   /// Useful for representing a cluster by referencing one of its children.
-  String childMarkerId;
+  String? childMarkerId;
 
-  Clusterable(
-      {this.latitude,
-      this.longitude,
-      this.isCluster,
-      this.clusterId,
-      this.pointsSize,
-      this.markerId,
-      this.childMarkerId});
+  Clusterable({
+    required this.latitude,
+    required this.longitude,
+    required this.isCluster,
+    required this.clusterId,
+    required this.pointsSize,
+    required this.markerId,
+    this.childMarkerId,
+  });
 }

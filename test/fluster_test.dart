@@ -1,5 +1,6 @@
 /*
- * Created by Alfonso Cejudo, Wednesday, July 24th 2019.
+ * Created by Alfonso Cejudo, Sunday, July 21st 2019.
+ * Updated by LuisGrt, Sunday, March 7th 2021.
  */
 
 import 'package:test/test.dart';
@@ -11,7 +12,7 @@ import 'common.dart';
 
 void main() {
   group('Fluster API Tests', () {
-    Fluster fluster;
+    late Fluster fluster;
 
     setUp(() {
       fluster = Fluster(
@@ -20,7 +21,7 @@ void main() {
           radius: 150,
           extent: 2048,
           nodeSize: 0,
-          points: List<Clusterable>(),
+          points: List<Clusterable>.empty(),
           createCluster: (cluster, longitude, latitude) {
             return MockClusterable();
           });

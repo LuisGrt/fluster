@@ -1,19 +1,26 @@
 /*
  * Created by Alfonso Cejudo, Sunday, July 21st 2019.
+ * Updated by LuisGrt, Sunday, March 7th 2021.
  */
 
 import 'base_cluster.dart';
 
 class Cluster extends BaseCluster {
-  Cluster({double x, double y, int id, int pointsSize, String childMarkerId}) {
-    this.x = x;
-    this.y = y;
-    this.id = id;
-    this.pointsSize = pointsSize;
-    this.childMarkerId = childMarkerId;
-
-    this.isCluster = true;
-    this.zoom = 24; // Max value.
-    this.parentId = -1;
-  }
+  Cluster({
+    required x,
+    required y,
+    int? id,
+    int? pointsSize,
+    String? childMarkerId,
+    int? zoom,
+    int? parentId,
+  }) : super(
+          x: x,
+          y: y,
+          id: id,
+          pointsSize: pointsSize,
+          zoom: zoom ?? 24, // Max value.
+          parentId: parentId ?? -1,
+          childMarkerId: childMarkerId,
+        );
 }
